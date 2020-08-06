@@ -1,0 +1,29 @@
+{
+  "name": "biorhythm-calculator",
+  "version": "1.0.0",
+  "description": "Comprehensive set of functions and helpers to check multiple biorhythm-related data",
+  "main": "index.js",
+  "author": "Alberto Rico",
+  "license": "CC BY-NC-SA 4.0",
+  "dependencies": {
+    "date-fns": "^2.15.0",
+    "math-helper-functions": "^1.2.0",
+    "number-helper-functions": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.4",
+    "eslint-plugin-jest": "^23.20.0",
+    "jest": "^26.2.2"
+  },
+  "keywords": [
+    "biorhythm",
+    "calculator",
+    "emotional",
+    "intellectual",
+    "physical"
+  ],
+  "scripts": {
+    "test": "jest",
+    "prepublish": "yarn test"
+  }
+}
