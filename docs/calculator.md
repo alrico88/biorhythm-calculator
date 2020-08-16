@@ -7,7 +7,7 @@
 <dt><a href="#calculateBiorhythm">calculateBiorhythm(dateOfBirth, dateToAnalyze)</a> ⇒ <code><a href="#BiorhythmResult">BiorhythmResult</a></code></dt>
 <dd><p>Calculates biorhythm based on birth date and a custom date</p>
 </dd>
-<dt><a href="#calculateBiorhythmRange">calculateBiorhythmRange(dateOfBirth, dateToAnalyze, amountOfDays)</a> ⇒ <code><a href="#BiorhythmResult">Array.&lt;BiorhythmResult&gt;</a></code></dt>
+<dt><a href="#calculateBiorhythmRange">calculateBiorhythmRange(dateOfBirth, dateToAnalyze, amountOfDays)</a> ⇒ <code><a href="#BiorhythmRangeResult">Array.&lt;BiorhythmRangeResult&gt;</a></code></dt>
 <dd><p>Gets biorhythms for date range</p>
 </dd>
 </dl>
@@ -16,6 +16,8 @@
 
 <dl>
 <dt><a href="#BiorhythmResult">BiorhythmResult</a></dt>
+<dd></dd>
+<dt><a href="#BiorhythmRangeResult">BiorhythmRangeResult</a></dt>
 <dd></dd>
 </dl>
 
@@ -48,12 +50,12 @@ Calculates biorhythm based on birth date and a custom date
 
 <a name="calculateBiorhythmRange"></a>
 
-## calculateBiorhythmRange(dateOfBirth, dateToAnalyze, amountOfDays) ⇒ [<code>Array.&lt;BiorhythmResult&gt;</code>](#BiorhythmResult)
+## calculateBiorhythmRange(dateOfBirth, dateToAnalyze, amountOfDays) ⇒ [<code>Array.&lt;BiorhythmRangeResult&gt;</code>](#BiorhythmRangeResult)
 
 Gets biorhythms for date range
 
 **Kind**: global function  
-**Returns**: [<code>Array.&lt;BiorhythmResult&gt;</code>](#BiorhythmResult) - Objects array that represents the days' status
+**Returns**: [<code>Array.&lt;BiorhythmRangeResult&gt;</code>](#BiorhythmRangeResult) - Objects array that represents the days' status
 
 | Param         | Type                | Description                                                                                              |
 | ------------- | ------------------- | -------------------------------------------------------------------------------------------------------- |
@@ -73,3 +75,15 @@ Gets biorhythms for date range
 | physical     | <code>number</code> |
 | emotional    | <code>number</code> |
 | intellectual | <code>number</code> |
+
+<a name="BiorhythmRangeResult"></a>
+
+## BiorhythmRangeResult
+
+**Kind**: global typedef  
+**Properties**
+
+| Name      | Type                                             |
+| --------- | ------------------------------------------------ |
+| day       | <code>Date</code>                                |
+| biorhythm | [<code>BiorhythmResult</code>](#BiorhythmResult) |

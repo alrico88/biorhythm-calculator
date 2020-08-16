@@ -10,6 +10,12 @@ const {getDifferenceInDays, getDateRange} = require('./dates');
  */
 
 /**
+ * @typedef BiorhythmRangeResult
+ * @property {Date} day
+ * @property {BiorhythmResult} biorhythm
+ */
+
+/**
  * Creates a biorhythm calculator based on the days passed since birth
  *
  * @param {number} daysDifference Days since birth
@@ -47,11 +53,14 @@ function calculateBiorhythm(dateOfBirth, dateToAnalyze) {
  * @param {Date} dateOfBirth The date of birth, as Date
  * @param {Date} dateToAnalyze The date to obtain the biorhythm data on
  * @param {number} amountOfDays Number of days to add in range (Ex. 3 will give desired date as well as 3 days before, and 3 days after)
- * @returns {BiorhythmResult[]} Objects array that represents the days' status
+ * @returns {BiorhythmRangeResult[]} Objects array that represents the days' status
  */
 function calculateBiorhythmRange(dateOfBirth, dateToAnalyze, amountOfDays) {
   const dates = getDateRange(dateToAnalyze, amountOfDays);
-  return dates.map((day) => calculateBiorhythm(dateOfBirth, day));
+  return dates.map((day) => ({
+    biorhythm: calculateBiorhythm(dateOfBirth, day),
+    day,
+  }));
 }
 
 module.exports = {
