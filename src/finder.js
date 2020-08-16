@@ -37,14 +37,12 @@ class DayFinder {
    * @returns {Date} Date where condition is met
    * @memberof DayFinder
    */
-  static getDayGeneric(dateToAnalyze, checkFunc, dayFunc) {
-    const staticParams = [this.dateOfBirth, checkFunc];
+  getDayGeneric(dateToAnalyze, checkFunc, dayFunc) {
     const status = calculateBiorhythm(this.dateOfBirth, dateToAnalyze)[
       this.biorhythmType
     ];
-
     if (checkFunc(status) === false) {
-      return DayFinder.getDayGeneric(...staticParams, dayFunc(dateToAnalyze));
+      return this.getDayGeneric(dayFunc(dateToAnalyze), checkFunc, dayFunc);
     } else {
       return dateToAnalyze;
     }
@@ -84,8 +82,8 @@ class DayFinder {
    * @memberof DayFinder
    */
   getNextDayGeneric(checkFunc) {
-    return DayFinder.getDayGeneric(
-      ...this.sharedParams,
+    return this.getDayGeneric(
+      this.startDate,
       checkFunc,
       DayFinder.dateFunc.next
     );
@@ -131,8 +129,8 @@ class DayFinder {
    * @memberof DayFinder
    */
   getPreviousDayGeneric(checkFunc) {
-    return DayFinder.getDayGeneric(
-      ...this.sharedParams,
+    return this.getDayGeneric(
+      this.startDate,
       checkFunc,
       DayFinder.dateFunc.previous
     );

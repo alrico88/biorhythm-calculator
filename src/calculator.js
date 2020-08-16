@@ -22,7 +22,7 @@ const {getDifferenceInDays, getDateRange} = require('./dates');
  * @returns {Function} Calculator function
  */
 function createCalculator(daysDifference) {
-  const numberOfDecimals = 1;
+  const numberOfDecimals = 2;
   const dividend = 2 * Math.PI * daysDifference;
 
   return function(divider) {
