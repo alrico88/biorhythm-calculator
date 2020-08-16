@@ -1,6 +1,6 @@
 {
   "name": "biorhythm-calculator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Comprehensive set of functions and helpers to check multiple biorhythm-related data",
   "main": "index.js",
   "author": "Alberto Rico",
@@ -22,6 +22,9 @@
     "intellectual",
     "physical"
   ],
+  "repository": {
+    "url": "https://github.com/alrico88/biorhythm-calculator"
+  },
   "scripts": {
     "test": "jest",
     "prepublish": "yarn test"
