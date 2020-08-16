@@ -1,6 +1,6 @@
 {
   "name": "biorhythm-calculator",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Comprehensive set of functions and helpers to check multiple biorhythm-related data",
   "main": "index.js",
   "author": "Alberto Rico",
