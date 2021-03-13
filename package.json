@@ -7,7 +7,7 @@
   "license": "CC BY-NC-SA 4.0",
   "dependencies": {
     "date-fns": "^2.15.0",
-    "math-helper-functions": "^1.2.0",
+    "math-helper-functions": "^2.0.1",
     "number-helper-functions": "^2.1.0"
   },
   "devDependencies": {
