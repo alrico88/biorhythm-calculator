@@ -39,6 +39,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+pnpm-debug.log*
 jspm_packages/
 
 # TypeScript v1 declaration files
@@ -67,6 +68,7 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
+.pnp.*
 
 # dotenv environment variables file
 .env

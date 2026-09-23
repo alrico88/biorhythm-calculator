@@ -2,7 +2,20 @@
   "name": "biorhythm-calculator",
   "version": "1.1.2",
   "description": "Comprehensive set of functions and helpers to check multiple biorhythm-related data",
-  "main": "index.js",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "author": "Alberto Rico",
   "license": "CC BY-NC-SA 4.0",
   "dependencies": {
@@ -11,9 +24,10 @@
     "number-helper-functions": "^2.1.0"
   },
   "devDependencies": {
-    "eslint": "^5.4",
-    "eslint-plugin-jest": "^23.20.0",
-    "jest": "^26.2.2"
+    "@biomejs/biome": "^2.2.0",
+    "@rslib/core": "^0.17.0",
+    "vitest": "^3.2.4",
+    "typescript": "^5.9.2"
   },
   "keywords": [
     "biorhythm",
@@ -26,7 +40,10 @@
     "url": "https://github.com/alrico88/biorhythm-calculator"
   },
   "scripts": {
-    "test": "jest",
-    "prepublish": "yarn test"
+    "build": "rslib build",
+    "check": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "prepublishOnly": "pnpm build && pnpm check && pnpm test"
   }
 }

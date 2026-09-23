@@ -1,12 +1,16 @@
-const {
+import { addDays } from 'date-fns';
+import { calcDomain } from 'math-helper-functions';
+import { describe, expect, test, vi } from 'vitest';
+import {
   calculateBiorhythm,
-  getHowManyFullCycles,
+  calculateBiorhythmRange,
   constants,
-} = require('../index');
-const addDays = require('date-fns/addDays');
-const {calcDomain} = require('math-helper-functions');
-const {getDateRange, getDifferenceInDays} = require('../src/dates');
-const {CYCLE_REPEAT_DAYS, CYCLE_LENGTHS} = constants;
+  DayFinder,
+  getCurrentCyclePercentage,
+  getHowManyFullCycles,
+} from '../dist/index.js';
+
+const { CYCLE_REPEAT_DAYS, CYCLE_LENGTHS } = constants;
 
 function getFullCycle(dateOfBirth, cycleLength) {
   const dates = [];
@@ -34,14 +38,8 @@ describe('Check biorhythm calculations', () => {
     const exampleDateOfBirth = new Date('2000-01-01');
     const firstDateToAnalyze = new Date('2000-01-02');
     const secondDateToAnalyze = addDays(firstDateToAnalyze, CYCLE_REPEAT_DAYS);
-    const firstDateData = calculateBiorhythm(
-      exampleDateOfBirth,
-      firstDateToAnalyze
-    );
-    const secondDateData = calculateBiorhythm(
-      exampleDateOfBirth,
-      secondDateToAnalyze
-    );
+    const firstDateData = calculateBiorhythm(exampleDateOfBirth, firstDateToAnalyze);
+    const secondDateData = calculateBiorhythm(exampleDateOfBirth, secondDateToAnalyze);
     expect(Object.values(firstDateData)).toStrictEqual(Object.values(secondDateData));
   });
 });
@@ -49,26 +47,16 @@ describe('Check biorhythm calculations', () => {
 describe('Check detail values', () => {
   const exampleDateOfBirth = new Date('2000-01-01');
 
-  test('Values for emotional should be between -1 and 1 for a full cycle', () => {
-    const dates = getFullCycle(exampleDateOfBirth, CYCLE_LENGTHS.emotional);
-    const values = dates.map((dateToAnalyze) =>
-        calculateBiorhythm(exampleDateOfBirth, dateToAnalyze).emotional);
-    expect(calcDomain(values)).toStrictEqual([-1, 1]);
-  });
-
-  test('Values for intellectual should be between -1 and 1 for a full cycle', () => {
-    const dates = getFullCycle(exampleDateOfBirth, CYCLE_LENGTHS.intellectual);
-    const values = dates.map((dateToAnalyze) =>
-        calculateBiorhythm(exampleDateOfBirth, dateToAnalyze).emotional);
-    expect(calcDomain(values)).toStrictEqual([-1, 1]);
-  });
-
-  test('Values for physical should be between -1 and 1 for a full cycle', () => {
-    const dates = getFullCycle(exampleDateOfBirth, CYCLE_LENGTHS.physical);
-    const values = dates.map((dateToAnalyze) =>
-        calculateBiorhythm(exampleDateOfBirth, dateToAnalyze).emotional);
-    expect(calcDomain(values)).toStrictEqual([-1, 1]);
-  });
+  test.each(['physical', 'emotional', 'intellectual'])(
+    'Values for %s should span -1 to 1 across its full cycle',
+    (biorhythm) => {
+      const dates = getFullCycle(exampleDateOfBirth, CYCLE_LENGTHS[biorhythm]);
+      const values = dates.map(
+        (dateToAnalyze) => calculateBiorhythm(exampleDateOfBirth, dateToAnalyze)[biorhythm],
+      );
+      expect(calcDomain(values)).toStrictEqual([-1, 1]);
+    },
+  );
 });
 
 describe('Check statistics functions', () => {
@@ -87,13 +75,38 @@ describe('Check statistics functions', () => {
 
 describe('Check date helpers', () => {
   test('A range of 3 dates prior and after should have 7 days', () => {
-    const range = getDateRange(new Date(), 3);
+    const range = calculateBiorhythmRange(new Date('2000-01-04'), new Date('2000-01-04'), 3);
     expect(range.length).toBe(7);
   });
 
   test('The difference in days betweem today and tomorrow should be 1', () => {
-    const today = new Date();
-    const tomorrow = new Date().setDate(new Date().getDate() + 1);
-    expect(getDifferenceInDays(tomorrow, today)).toBe(1);
+    const today = new Date('2000-01-01');
+    const tomorrow = addDays(today, 1);
+    expect(getHowManyFullCycles(today, tomorrow)).toBeCloseTo(1 / CYCLE_REPEAT_DAYS);
+  });
+});
+
+describe('Check cycle finder', () => {
+  test('Cycle progress is a percentage between 0 and 100', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2024-06-15T12:00:00Z'));
+
+    try {
+      const percentage = getCurrentCyclePercentage(new Date('2000-01-01'), 'physical');
+      expect(percentage).toBeGreaterThanOrEqual(0);
+      expect(percentage).toBeLessThanOrEqual(100);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  test('Throws when a requested rounded value does not occur in the cycle', () => {
+    const finder = new DayFinder(new Date('2000-01-01'), new Date('2024-01-01'), 'physical');
+    expect(() => finder.getNextDayWhere(0.123456)).toThrow(RangeError);
+  });
+
+  test('Rejects non-finite desired values', () => {
+    const finder = new DayFinder(new Date('2000-01-01'), new Date('2024-01-01'), 'physical');
+    expect(() => finder.getNextDayWhere(Number.NaN)).toThrow(RangeError);
   });
 });
